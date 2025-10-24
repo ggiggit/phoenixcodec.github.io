@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Hugo 0.66.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/custom.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="alternate" href="index.xml" type="application/rss+xml" title="Speech Research">
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css"
+    integrity="sha256-XoaMnoYC5TH6/+ihMEnospgm0J1PM/nioxbOUdnM8HY=" crossorigin="anonymous">
+  
+  <style>
+    body {
+      font-size: 20px;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: black;
+    }
+
+    thead {
+      border-top: 1px solid #ccc;
+    }
+
+    .table td {
+      border: none;
+    }
+
+    .no-border {
+      border: none;
+    }
+
+    th {
+      font-weight: lighter;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .divider {
+      border-top: 2px solid #ccc;
+      margin: 20px 0;
+    }
+
+    .audio-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+    }
+
+    td {
+      text-align: justify;
+      color: black;
+      font-family: georgian;
+    }
+
+    font {
+      text-align: justify;
+      color: black;
+      font-family: georgian;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media(min-width:1200px) {
+      .table-container {
+        overflow-x: auto;
+        width: 100%;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      nav ul li {
+        display: block;
+      }
+
+      .video-container {
+        padding-bottom: 75%;
+      }
+
+      video {
+        width: 100%;
+      }
+    }
+  </style>
+  
+  <title>PhoenixCodec: Taming Neural Speech Coding for Extreme Low-Resource Scenarios</title>
+</head>
+
+<body rightmargin="150" leftmargin="150" topmargin="100" bottommargin="100" line-height:160%>
+  <div class="container">
+
+    <header role="banner">
+    </header>
+    <main role="main">
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <br></br>
+        
+        <h1 itemprop="headline" align="center">
+          <font style="font-size:40px; color:black;">PhoenixCodec: Taming Neural Speech Coding for Extreme Low-Resource Scenarios</font>
+        </h1>
+        <br></br>
+
+        <p align="center" style="font-family: 'Georgia', 'Times New Roman', serif; font-size:18px; color:#000; line-height:1.6;">
+        <i>
+            Zixiang Wan<sup>★†</sup>&nbsp;&nbsp;&nbsp;
+            Haoran Zhao<sup>‡†</sup>&nbsp;&nbsp;&nbsp;
+            Guochang Zhang<sup>‡</sup>&nbsp;&nbsp;&nbsp;
+            Runqiang Han<sup>‡</sup><br>
+            Jianqiang Wei<sup>‡*</sup>&nbsp;&nbsp;&nbsp;
+            Yuexian Zou<sup>★*</sup>
+        </i>
+        </p>
+    
+        <p align="center" style="font-family:'Georgia','Times New Roman',serif; font-size:18px; color:#000; line-height:1.4;">
+        <sup>‡</sup> Audio Innovation Technology Department, Anker Inc, Beijing, China<br>
+        <sup>★</sup> Guangdong Provincial Key Laboratory of Ultra High Definition Immersive Media Technology,<br>
+        Peking University, Shenzhen, China
+        </p>
+    
+        <p align="center" style="font-family:'Georgia','Times New Roman',serif; font-size:16px; color:#000;">
+        <sup>†</sup> Equal contribution.&nbsp;&nbsp;
+        <sup>*</sup> Corresponding authors.
+        </p>
+
+        <br>
+
+        <table align=center width=500px>
+          <center>
+            <span class="link-block">
+              <a href="#"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon" style="color: black;">
+                  <i class="fa fa-file-text" aria-hidden="true"></i>
+                </span>
+                <span style="font-size:22px; color: black; font-family: georgian;"><b>Paper</b></span>
+              </a>
+            </span>
+            &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="link-block">
+              <a href="#"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon" style="color: black;">
+                  <i class="fa fa-github"></i>
+                </span>
+                <span style="font-size:22px; color: black; font-family: 'Georgia', serif;"><b>Code</b></span>
+              </a>
+            </span>
+          </center>
+        </table>
+
+        <br>
+        <section itemprop="entry-text">
+          <table class="table" align="center" style="table-layout: fixed; word-break:break-word">
+            <th>
+              <h2 id="abstract">
+                <center>
+                  <h1>Abstract</h1>
+                </center>
+              </h2>
+              <p style="text-align: justify; color:black;font-family: georgian;">
+                <font>
+                  This paper presents PhoenixCodec, a comprehensive neural speech coding and decoding framework designed for extremely low-resource conditions. 
+                  The proposed system integrates an optimized asymmetric frequency-time architecture, 
+                  a Cyclical Calibration and Refinement (CCR) training strategy, 
+                  and a noise-invariant fine-tuning procedure. 
+                  Under stringent constraints—computation 
+                  below 700 MFLOPs, latency less than 30 ms, 
+                  and dual-rate support at 1 kbps and 6 kbps
+                  —existing methods face a trade-off between efficiency and quality. 
+                  PhoenixCodec addresses these challenges by alleviating the resource-scattering 
+                  of conventional decoders, employing CCR to escape local optima, 
+                  and enhancing robustness through noisy-sample fine-tuning. 
+                  In the LRAC 2025 Challenge Track 1, 
+                  the proposed system <strong>ranked third overall</strong> 
+                  and demonstrated <strong>the best performance</strong> at 1 kbps 
+                  in both <em>real-world noise and reverberation</em> and <em>intelligibility in clean</em> tests, 
+                  confirming its effectiveness.
+                </font>
+              </p>
+            </th>
+          </table>
+
+          <table class="table" align="center" style="table-layout: fixed;word-break:break-word">
+            <th style="border: None;">
+              <h2 id="graph">
+                <center>
+                  <h1>Model Architecture</h1>
+                </center>
+              </h2>
+              <p style="text-align: justify; color:black;font-family: georgian;">
+                <font>
+                    We propose a frequency–time domain fusion end-to-end audio codec that achieves high-quality speech transmission under strict resource constraints.
+                    The overall architecture, illustrated in Figure 1, consists of a frequency-domain encoder, a residual vector quantizer (RVQ), and a time-domain decoder.
+                    The input audio is first transformed into an amplitude spectrogram via short-time Fourier transform (STFT).
+                    <br><br>
+                    The frequency-domain encoder, built upon SpecTokenizer, employs a complex convolution layer followed by four cascaded FdownBlocks and RNNBlocks to extract and compress spectral features.
+                    Each FdownBlock combines a 2D convolution with Snake2D activation to enhance harmonic-structure modeling,
+                    while each RNNBlock integrates FLNorm, Tanh, GRU, 2D convolution, and Snake2D activation with residual connections to maintain stable gradient flow and preserve feature fidelity.
+                    <br><br>
+                    The latent representation is subsequently quantized by the RVQ module and passed to a BigCodec-based time-domain decoder.
+                    This decoder comprises a 1D convolution, a unidirectional LSTM with residual connections,
+                    four sequential DecoderBlocks, Snake1D activation, an output 1D convolution, and Tanh activation.
+                    Each DecoderBlock contains Snake1D activation, a 1D transposed convolution for upsampling, and several ResidualBlocks.
+                    Each ResidualBlock consists of two 1D convolutions with different kernel sizes and Snake1D activations,
+                    coupled with a residual connection at the end, thereby improving high-frequency detail restoration and spatial perceptual quality in waveform reconstruction.
+                    <br><br>
+                    Model training adopts a multi-objective loss function, including multi-scale mel-spectrogram loss, VQ quantization loss, and GAN-based adversarial loss.
+                    During adversarial training, a Multi-Period Discriminator (MPD) and Multi-Resolution Discriminator (MRD) are employed jointly to constrain both time-domain details and spectral textures,
+                    significantly enhancing mid-to-high frequency energy reproduction and naturalness.
+                    As a result, the proposed system delivers high-fidelity speech reconstruction that combines audio quality and intelligibility under low-latency and low-bitrate conditions.
+                </font>
+              </p>
+            <figure>
+              <p align="center">
+                <img src="./codec_architecture.png" style="width: 80%; max-width: 1000px;" class="center" />
+              </p>
+              <figcaption>
+                <p style="text-align: justify;">
+                  <center>
+                    <font color="061E61"><b>Figure 1.</b>&nbsp;Framework of the proposed model.</font>
+                  </center>
+                </p>
+              </figcaption>
+            </figure>
+            </th>
+          </table>
+
+          <table class="table" align="center" style="table-layout: fixed;word-break:break-word">
+            <th style="border: None;">
+              <h2 id="experiments">
+                <center>
+                  <h1>EXPERIMENTS</h1>
+                </center>
+              </h2>
+              
+              <h3 style="color: black; text-align: left; font-size: 24px; margin-top: 15px;">Datasets</h3>
+              <p style="text-align: justify; color:black;font-family: georgian;">
+                <font>
+                  All training data in this study are sourced from the official
+                  LRAC2025 dataset and underwent rigorous filtering and preprocessing prior to use. For noise data, labels were predicted
+                  using a pre-trained audio understanding model, and any non-pure noise samples containing speech were removed to ensure
+                  clean noise content. For reverberation data, room impulse responses (RIRs) were truncated before convolution, retaining
+                  only the 1 ms segment following the peak. This reduces long-tail decay that can impair speech clarity while preserving spatial characteristics.
+                  <br><br>
+                  Based on this, we applied a data augmentation strategy by
+                  mixing clean, noisy, and reverberant speech in a 1:1:1 ratio. In
+                  noise mixing, the signal-to-noise ratio (SNR) was uniformly
+                  sampled within the range of 10–30 dB to increase acoustic diversity.
+                  <br><br>
+                  Model evaluation was conducted on an open test set from
+                  the same source, with inference performed directly on the
+                  original official data without additional processing, and performance tested at both 1 kbps and 6 kbps bitrates.
+                </font>
+              </p>
+              
+              <h3 style="color: black; text-align: left; font-size: 24px; margin-top: 20px;">Implementation Details</h3>
+              <p style="text-align: justify; color:black;font-family: georgian;">
+                <font>
+                  The proposed model has an overall computational complexity of 698 M FLOPs and 1.48 M parameters, with the encoder
+                  and RVQ module accounting for 399 M FLOPs and 1.17 M
+                  parameters, and the decoder for 299 M FLOPs and 0.32 M parameters. The system operates at a sampling rate of 24 kHz,
+                  with a frame length of 720 samples and a frame shift of 288
+                  samples (approximately 83 Hz frame rate). In the STFT computation, only frequency bins 0–240 (0–8kHz) are used, effectively yielding a 24kHz to 16 kHz downsampling without
+                  introducing additional latency.
+                  <br><br>
+                  The encoder employs convolution kernels and strides of
+                  1, introducing no additional latency. The decoder primarily
+                  uses causal convolutions and causal transposed convolutions,
+                  but non-causal convolutions are applied in specific positions
+                  to enhance reconstruction quality: the first convolution layer
+                  in the decoder (kernel = 1, stride = 1), the first convolution
+                  layer within repeated ResidualBlocks (kernel sizes = [7, 9, 9,
+                  11], stride = 1), and the final convolution layer in the decoder
+                  (kernel = 7, stride = 1). These designs significantly improve
+                  mid-to-high frequency detail within the latency budget. The
+                  end-to-end latency is determined by both the STFT window
+                  length and the non-causal convolutions, and is kept within 30 ms overall.
+                  <br><br>
+                  To convert the 16 kHz audio output of the decoder to
+                  24 kHz without noticeably increasing latency, we use a
+                  fractional-rate resampling strategy. First, the signal is upsampled by a factor of three using zero-insertion. Next, the
+                  spectral images introduced by zero-insertion are removed
+                  with an 11th-order IIR Butterworth low-pass filter with an 8
+                  kHz cutoff frequency. Finally, the signal is downsampled by
+                  a factor of two to reach the target sampling rate. Compared
+                  to an FIR-based approach, this IIR design exhibits a maximum passband group delay of only 8 samples near 8 kHz,
+                  making it well-suited for real-time applications. The latency
+                  breakdown is shown in Table 2.
+                </font>
+              </p>
+      
+              <figure>
+                <table class="table" align="center" style="width: 90%; margin: 20px auto; border-top: 2px solid black; border-bottom: 2px solid black; table-layout: auto;">
+                  <caption style="caption-side: top; text-align: center; color: black; padding-top: 5px; padding-bottom: 10px;">
+                    <font style="font-family: georgian; font-size: 19px;"><b>Table 2.</b> Latency breakdown of the proposed system.</font>
+                  </caption>
+                  <thead style="border-bottom: 1px solid black;">
+                    <tr>
+                      <th style="text-align: left; font-family: georgian; padding: 8px; font-weight: bold; font-size: 18px;">Source</th>
+                      <th style="text-align: left; font-family: georgian; padding: 8px; font-weight: bold; font-size: 18px;">Samples</th>
+                      <th style="text-align: left; font-family: georgian; padding: 8px; font-weight: bold; font-size: 18px;">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">STFT hopsize</td>
+                      <td style="text-align: left; padding: 8px;">192 @ 16kHz</td>
+                      <td style="text-align: left; padding: 8px;">Frame shift</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Decoder Residual Units</td>
+                      <td style="text-align: left; padding: 8px;">272 @ 16kHz</td>
+                      <td style="text-align: left; padding: 8px;">64 &times; 3 + 16 &times; 4 + 4 &times; 4 + 1 &times; 5</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Final decoder convolution</td>
+                      <td style="text-align: left; padding: 8px;">3 @ 16kHz</td>
+                      <td style="text-align: left; padding: 8px;">Kernel size = 7</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Resampling delay</td>
+                      <td style="text-align: left; padding: 8px;">8 @ 24kHz</td>
+                      <td style="text-align: left; padding: 8px;">Maximum group delay of the IIR filter</td>
+                    </tr>
+                    <tr style="border-top: 1px solid black;">
+                      <td style="text-align: left; padding: 8px;"><b>Total (24kHz)</b></td>
+                      <td style="text-align: left; padding: 8px;"><b>716 @ 24kHz (29.83 ms)</b></td>
+                      <td style="text-align: left; padding: 8px;"><b>472 &times; 3/2 + 8</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </figure>
+      
+              <p style="text-align: justify; color:black;font-family: georgian;">
+                <font>
+                  The RVQ module consists of six codebooks, each containing 4096 entries (indexed with 12-bit codes) and a vector
+                  dimension of 8. During inference, either 1 codebook (for 1
+                  kbps) or all 6 codebooks (for 6 kbps) can be selected, enabling
+                  operation at two different bitrates. The encoder channel configuration is [32, 32, 32, 128, 335], with time-axis kernel sizes
+                  and strides of [1, 1, 1, 1] and frequency-axis kernel sizes and
+                  strides of [5, 4, 4, 3]. The decoder channels are [117, 58, 29,
+                  14, 7], with upsampling rates of [3, 4, 4, 4]. For the discriminators, the MPD uses periods [2, 3, 5, 7, 11], and the MRD
+                  operates with window sizes [128, 256, 512, 1024, 2048].
+                  <br><br>
+                  For optimization, both the generator and discriminators
+                  use an initial learning rate of 8 &times; 10<sup>&minus;4</sup> during the Mel stage
+                  and 1 &times; 10<sup>&minus;4</sup> during the GAN stage, gradually reduced to
+                  1 &times; 10<sup>&minus;5</sup>
+                  . Adam is used throughout all training stages.
+                  <br><br>
+                  <b>Checkpoint Selection Strategy:</b> For system submission, we performed subjective listening evaluations on multiple models from different training stages using the open test set, selecting the checkpoint that yielded the best combination of
+                  audio quality and fine-detail reproduction as the final competition version.
+                </font>
+              </p>
+            </th>
+          </table>
+
+          <table class="table" align="center" style="table-layout: fixed;word-break:break-word">
+            <th>
+              <h2 id="graph">
+                <center>
+                  <h1>Performance Comparison</h1>
+                </center>
+              </h2>
+              
+              <div class="table-container">
+                <figure>
+                  <table class="table" align="center" style="width: 100%; margin-top: 20px; border-top: 2px solid black; border-bottom: 2px solid black; word-break: normal;">
+                    <caption style="caption-side: top; text-align: center; color: black; padding-top: 5px; padding-bottom: 10px;">
+                      <font style="font-family: georgian; font-size: 19px;"><b>Table 3.</b> Final Results of the LRAC 2025 Challenge (Track 1).</font>
+                    </caption>
+                    
+                    <style>
+                      .perf-th { 
+                        text-align: center; 
+                        font-family: georgian; 
+                        padding: 6px; 
+                        font-weight: bold; 
+                        font-size: 15px; 
+                        border-bottom: 1px solid #ccc; 
+                        vertical-align: middle !important; 
+                      }
+                      .perf-td { 
+                        text-align: center; 
+                        font-family: georgian; 
+                        padding: 6px; 
+                        font-size: 15px; 
+                        vertical-align: middle !important; 
+                      }
+                    </style>
+                    
+                    <thead style="border-bottom: 1px solid black;">
+                      <tr style="border-bottom: 1px solid #ccc;">
+                        <th class="perf-th" style="text-align: left; min-width: 160px;">Test Type</th>
+                        <th class="perf-th" colspan="2">Clean speech</th>
+                        <th class="perf-th" colspan="2">Real-world light noise<br>and reverb</th>
+                        <th class="perf-th" colspan="2">Simultaneous<br>talkers</th>
+                        <th class="perf-th">Intelligibility<br>in clean</th>
+                        <th class="perf-th">Aggregate<br>Score</th>
+                        <th class="perf-th" style="width: 5%;"></th>
+                      </tr>
+                      
+                      <tr style="border-bottom: 1px solid #ccc;">
+                        <th class="perf-th" style="text-align: left; min-width: 160px;">Scale</th>
+                        <th class="perf-th" colspan="2">MUSHRA [0, 100]</th>
+                        <th class="perf-th" colspan="2">DMOS [1, 5]</th>
+                        <th class="perf-th" colspan="2">DMOS [1, 5]</th>
+                        <th class="perf-th">DRT score [-100, 100]</th>
+                        <th class="perf-th" style="font-size: 11px;">Weighted sum of normalized test<br> mean scores [0, 100]</th>
+                        <th class="perf-th"></th>
+                      </tr>
+                      
+                      <tr style="border-bottom: 1px solid #ccc;">
+                        <th class="perf-th" style="text-align: left; min-width: 160px;">Weight</th>
+                        <th class="perf-th" colspan="2">20%</th>
+                        <th class="perf-th" colspan="2">20%</th>
+                        <th class="perf-th" colspan="2">5%</th>
+                        <th class="perf-th">10%</th>
+                        <th class="perf-th">100%</th>
+                        <th class="perf-th"></th>
+                      </tr>
+                      
+                      <tr style="border-bottom: 1px solid black;">
+                        <th class="perf-th" style="text-align: left; min-width: 160px;">Bitrate Mode</th>
+                        <th class="perf-th">ULBR</th>
+                        <th class="perf-th">LBR</th>
+                        <th class="perf-th">ULBR</th>
+                        <th class="perf-th">LBR</th>
+                        <th class="perf-th">ULBR</th>
+                        <th class="perf-th">LBR</th>
+                        <th class="perf-th">ULBR</th>
+                        <th class="perf-th">Final Score</th>
+                        <th class="perf-th">Overall<br>Rank</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="background-color: #f9f9f9;">
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">teamwzqaq</td>
+                        <td class="perf-td">62.65</td>
+                        <td class="perf-td">81.75</td>
+                        <td class="perf-td">3.02</td>
+                        <td class="perf-td">4.44</td>
+                        <td class="perf-td">2.82</td>
+                        <td class="perf-td">4.35</td>
+                        <td class="perf-td">85.43</td>
+                        <td class="perf-td">71.91</td>
+                        <td class="perf-td" style="font-weight: bold;">1</td>
+                      </tr>
+                      <tr>
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">nano-codec</td>
+                        <td class="perf-td">59.23</td>
+                        <td class="perf-td">81.17</td>
+                        <td class="perf-td">3.13</td>
+                        <td class="perf-td">4.44</td>
+                        <td class="perf-td">2.60</td>
+                        <td class="perf-td">4.22</td>
+                        <td class="perf-td">78.12</td>
+                        <td class="perf-td">70.86</td>
+                        <td class="perf-td" style="font-weight: bold;">2</td>
+                      </tr>
+                      <tr style="background-color: #f0f8ff;"> 
+                        <td class="perf-td" style="text-align: left; font-weight: bold; min-width: 160px;">PhoenixCodec</td>
+                        <td class="perf-td">60.90</td>
+                        <td class="perf-td">80.69</td>
+                        <td class="perf-td" style="font-weight: bold;"><strong>3.40</strong></td>
+                        <td class="perf-td">4.16</td>
+                        <td class="perf-td">2.08</td>
+                        <td class="perf-td">2.98</td>
+                        <td class="perf-td" style="font-weight: bold;"><strong>85.57</strong></td>
+                        <td class="perf-td">69.22</td>
+                        <td class="perf-td" style="font-weight: bold;">3</td>
+                      </tr>
+                      <tr style="background-color: #f9f9f9;">
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">nju-aalab</td>
+                        <td class="perf-td">65.20</td>
+                        <td class="perf-td">89.19</td>
+                        <td class="perf-td">2.74</td>
+                        <td class="perf-td">4.12</td>
+                        <td class="perf-td">1.70</td>
+                        <td class="perf-td">2.82</td>
+                        <td class="perf-td">82.98</td>
+                        <td class="perf-td">67.48</td>
+                        <td class="perf-td" style="font-weight: bold;">4</td>
+                      </tr>
+                      <tr>
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">boya-audio</td>
+                        <td class="perf-td">35.22</td>
+                        <td class="perf-td">77.24</td>
+                        <td class="perf-td">2.21</td>
+                        <td class="perf-td">4.30</td>
+                        <td class="perf-td">2.03</td>
+                        <td class="perf-td">4.26</td>
+                        <td class="perf-td">80.29</td>
+                        <td class="perf-td">59.42</td>
+                        <td class="perf-td" style="font-weight: bold;">5</td>
+                      </tr>
+                      <tr style="background-color: #f9f9f9;">
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">pdura7</td>
+                        <td class="perf-td">42.75</td>
+                        <td class="perf-td">62.56</td>
+                        <td class="perf-td">2.30</td>
+                        <td class="perf-td">3.29</td>
+                        <td class="perf-td">1.68</td>
+                        <td class="perf-td">2.05</td>
+                        <td class="perf-td">75.34</td>
+                        <td class="perf-td">49.94</td>
+                        <td class="perf-td" style="font-weight: bold;">6</td>
+                      </tr>
+                      <tr>
+                        <td class="perf-td" style="text-align: left; min-width: 160px;">lrac-challenge</td>
+                        <td class="perf-td">17.92</td>
+                        <td class="perf-td">74.28</td>
+                        <td class="perf-td">1.31</td>
+                        <td class="perf-td">3.35</td>
+                        <td class="perf-td">1.26</td>
+                        <td class="perf-td">2.20</td>
+                        <td class="perf-td">75.90</td>
+                        <td class="perf-td">42.36</td>
+                        <td class="perf-td" style="font-weight: bold;">7</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </figure>
+              </div> 
+              
+            </th>
+          </table>
+          <th style="border: None;">
+            <h2 id="audio-examples">
+              <center>
+                <h1>Audio Examples</h1>
+              </center>
+            </h2>
+          
+            <h3 style="color: black; margin-top: 25px; text-align: left;">Clean Speech</h3>
+            <div class="table-container">
+              <table class="table" style="word-break: break-word;">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;"><font color="061E61">Ground Truth</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (6kbps)</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (1kbps)</font></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_017_m" src="figs/groundtruth/clean/clean_subj_english_017_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/clean/clean_subj_english_017_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_017_m" src="figs/PhoenixCodec_6kbps/clean/clean_subj_english_017_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/clean/clean_subj_english_017_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_017_m" src="figs/PhoenixCodec_1kbps/clean/clean_subj_english_017_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/clean/clean_subj_english_017_m.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_020_m" src="figs/groundtruth/clean/clean_subj_english_020_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/clean/clean_subj_english_020_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_020_m" src="figs/PhoenixCodec_6kbps/clean/clean_subj_english_020_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/clean/clean_subj_english_020_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_020_m" src="figs/PhoenixCodec_1kbps/clean/clean_subj_english_020_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/clean/clean_subj_english_020_m.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_037_m" src="figs/groundtruth/clean/clean_subj_english_037_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/clean/clean_subj_english_037_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_037_m" src="figs/PhoenixCodec_6kbps/clean/clean_subj_english_037_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/clean/clean_subj_english_037_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_037_m" src="figs/PhoenixCodec_1kbps/clean/clean_subj_english_037_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/clean/clean_subj_english_037_m.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_039_m" src="figs/groundtruth/clean/clean_subj_english_039_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/clean/clean_subj_english_039_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_039_m" src="figs/PhoenixCodec_6kbps/clean/clean_subj_english_039_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/clean/clean_subj_english_039_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_039_m" src="figs/PhoenixCodec_1kbps/clean/clean_subj_english_039_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/clean/clean_subj_english_039_m.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_041_m" src="figs/groundtruth/clean/clean_subj_english_041_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/clean/clean_subj_english_041_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_041_m" src="figs/PhoenixCodec_6kbps/clean/clean_subj_english_041_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/clean/clean_subj_english_041_m.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of clean_subj_english_041_m" src="figs/PhoenixCodec_1kbps/clean/clean_subj_english_041_m.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/clean/clean_subj_english_041_m.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <h3 style="color: black; margin-top: 25px; text-align: left;">DRT English Clean</h3>
+            <div class="table-container">
+              <table class="table" style="word-break: break-word; width: 67%; margin-left: auto; margin-right: auto;">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;"><font color="061E61">Ground Truth</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (1kbps)</font></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb" src="figs/groundtruth/drt_en_clean/back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/drt_en_clean/back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb" src="figs/PhoenixCodec_1kbps/drt_en_clean/back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/drt_en_clean/back_A33X52IN60MSOE_e2d4cdf13909446b84820f1f9c8290cb.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da" src="figs/groundtruth/drt_en_clean/back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/drt_en_clean/back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da" src="figs/PhoenixCodec_1kbps/drt_en_clean/back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/drt_en_clean/back_A3TDPXTB6Y6H1I_5e3c18205cee4761a322322b7e5cd0da.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020" src="figs/groundtruth/drt_en_clean/bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/drt_en_clean/bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020" src="figs/PhoenixCodec_1kbps/drt_en_clean/bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/drt_en_clean/bad_A1SHLWKA0UH1IS_934363b93be24ee682e48e5118af2020.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13" src="figs/groundtruth/drt_en_clean/bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/drt_en_clean/bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13" src="figs/PhoenixCodec_1kbps/drt_en_clean/bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/drt_en_clean/bad_A2ER0EVZ7E1Z8G_9f63688481ca40ff99bcd0465bdf7b13.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e" src="figs/groundtruth/drt_en_clean/bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/drt_en_clean/bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e" src="figs/PhoenixCodec_1kbps/drt_en_clean/bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/drt_en_clean/bag_A2ER0EVZ7E1Z8G_46fea23f510543c8808326780a9e2d9e.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <h3 style="color: black; margin-top: 25px; text-align: left;">Real-world Noise</h3>
+            <div class="table-container">
+              <table class="table" style="word-break: break-word;">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;"><font color="061E61">Ground Truth</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (6kbps)</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (1kbps)</font></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_001" src="figs/groundtruth/realworld/realworld_data_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/realworld/realworld_data_001.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_001" src="figs/PhoenixCodec_6kbps/realworld/realworld_data_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/realworld/realworld_data_001.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_001" src="figs/PhoenixCodec_1kbps/realworld/realworld_data_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/realworld/realworld_data_001.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_002" src="figs/groundtruth/realworld/realworld_data_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/realworld/realworld_data_002.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_002" src="figs/PhoenixCodec_6kbps/realworld/realworld_data_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/realworld/realworld_data_002.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_002" src="figs/PhoenixCodec_1kbps/realworld/realworld_data_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/realworld/realworld_data_002.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_003" src="figs/groundtruth/realworld/realworld_data_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/realworld/realworld_data_003.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_003" src="figs/PhoenixCodec_6kbps/realworld/realworld_data_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/realworld/realworld_data_003.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_003" src="figs/PhoenixCodec_1kbps/realworld/realworld_data_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/realworld/realworld_data_003.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_004" src="figs/groundtruth/realworld/realworld_data_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/realworld/realworld_data_004.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_004" src="figs/PhoenixCodec_6kbps/realworld/realworld_data_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/realworld/realworld_data_004.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_004" src="figs/PhoenixCodec_1kbps/realworld/realworld_data_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/realworld/realworld_data_004.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_005" src="figs/groundtruth/realworld/realworld_data_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/realworld/realworld_data_005.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_005" src="figs/PhoenixCodec_6kbps/realworld/realworld_data_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/realworld/realworld_data_005.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of realworld_data_005" src="figs/PhoenixCodec_1kbps/realworld/realworld_data_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/realworld/realworld_data_005.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <h3 style="color: black; margin-top: 25px; text-align: left;">Simultaneous Talkers</h3>
+            <div class="table-container">
+              <table class="table" style="word-break: break-word;">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;"><font color="061E61">Ground Truth</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (6kbps)</font></th>
+                    <th style="text-align: center;"><font color="061E61">PhoenixCodec (1kbps)</font></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_001" src="figs/groundtruth/simultaneous_talkers/simultaneous_talkers_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/simultaneous_talkers/simultaneous_talkers_001.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_001" src="figs/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_001.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_001" src="figs/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_001.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_001.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_002" src="figs/groundtruth/simultaneous_talkers/simultaneous_talkers_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/simultaneous_talkers/simultaneous_talkers_002.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_002" src="figs/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_002.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_002" src="figs/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_002.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_002.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_003" src="figs/groundtruth/simultaneous_talkers/simultaneous_talkers_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/simultaneous_talkers/simultaneous_talkers_003.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_003" src="figs/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_003.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_003" src="figs/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_003.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_003.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_004" src="figs/groundtruth/simultaneous_talkers/simultaneous_talkers_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/simultaneous_talkers/simultaneous_talkers_004.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_004" src="figs/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_004.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_004" src="figs/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_004.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_004.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_005" src="figs/groundtruth/simultaneous_talkers/simultaneous_talkers_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/groundtruth/simultaneous_talkers/simultaneous_talkers_005.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_005" src="figs/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_6kbps/simultaneous_talkers/simultaneous_talkers_005.wav" type="audio/wav" /></audio>
+                    </td>
+                    <td>
+                      <img alt="Spectrogram of simultaneous_talkers_005" src="figs/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_005.png" />
+                      <audio controls style="width: 100%;"><source src="audios/PhoenixCodec_1kbps/simultaneous_talkers/simultaneous_talkers_005.wav" type="audio/wav" /></audio>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </th>
+          <hr>
+          <br></br>
+        </section>
+      </article>
+    </main>
+
+  </div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      HTML: ["input/TeX", "output/HTML-CSS"],
+      TeX: {
+        Macros: {
+          bm: ["\\boldsymbol{#1}", 1],
+          argmax: ["\\mathop{\\rm arg\\,max}\\limits"],
+          argmin: ["\\mathop{\\rm arg\\,min}\\limits"]
+        },
+        extensions: ["AMSmath.js", "AMSsymbols.js"],
+        equationNumbers: { autoNumber: "AMS" }
+      },
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [['$', '$'], ["\\(", "\\)"]],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+        processEscapes: true
+      },
+      "HTML-CSS": {
+        availableFonts: ["TeX"],
+        linebreaks: { automatic: true }
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6Hty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
